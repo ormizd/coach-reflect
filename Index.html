@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Reflective Practice — Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF8F4;
+    --ink: #1C1B19;
+    --muted: #6B6356;
+    --clay: #8C5B3F;
+    --sage: #3D5A4C;
+    --line: #E8E2D6;
+    --line-strong: #D8D0C0;
+  }
+
+- { box-sizing: border-box; }
+
+html, body {
+margin: 0;
+padding: 0;
+background: var(–paper);
+color: var(–ink);
+font-family: ‘Inter’, system-ui, sans-serif;
+-webkit-font-smoothing: antialiased;
+overscroll-behavior-y: none;
+}
+
+body {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+}
+
+input, select, button, textarea { font-size: 16px; }
+
+.app {
+max-width: 480px;
+width: 100%;
+margin: 0 auto;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+position: relative;
+}
+
+/* — Session-timer progress signature — */
+.timeline {
+position: relative;
+height: 3px;
+background: var(–line);
+margin: 0;
+overflow: hidden;
+}
+.timeline-fill {
+position: absolute;
+top: 0; left: 0; height: 100%;
+background: var(–clay);
+transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.topbar {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 18px 24px 14px;
+}
+.topbar .step-label {
+font-size: 12px;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+color: var(–muted);
+font-weight: 500;
+}
+.topbar .back-btn {
+background: none;
+border: none;
+color: var(–muted);
+font-family: ‘Inter’, sans-serif;
+font-size: 14px;
+cursor: pointer;
+padding: 4px 0;
+visibility: hidden;
+}
+.topbar .back-btn.visible { visibility: visible; }
+
+.screen {
+flex: 1;
+display: flex;
+flex-direction: column;
+padding: 8px 28px 28px;
+animation: rise 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes rise {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+font-size: 13px;
+color: var(–clay);
+font-weight: 600;
+letter-spacing: 0.04em;
+margin-bottom: 10px;
+}
+
+h1 {
+font-family: ‘Source Serif 4’, serif;
+font-weight: 500;
+font-size: 28px;
+line-height: 1.25;
+margin: 0 0 10px;
+letter-spacing: -0.01em;
+}
+
+.lede {
+font-size: 15.5px;
+line-height: 1.55;
+color: var(–muted);
+margin: 0 0 28px;
+}
+
+.spacer { flex: 1; }
+
+/* — Level cards — */
+.level-card {
+border: 1px solid var(–line-strong);
+border-radius: 10px;
+padding: 18px 18px;
+margin-bottom: 12px;
+cursor: pointer;
+background: #fff;
+transition: border-color 0.2s, box-shadow 0.2s;
+display: flex;
+align-items: flex-start;
+gap: 14px;
+}
+.level-card:active { transform: scale(0.99); }
+.level-card.selected {
+border-color: var(–clay);
+box-shadow: 0 0 0 1px var(–clay);
+}
+.level-mark {
+font-family: ‘Source Serif 4’, serif;
+font-size: 20px;
+font-weight: 600;
+color: var(–clay);
+min-width: 44px;
+line-height: 1.3;
+}
+.level-body .level-name {
+font-weight: 600;
+font-size: 15.5px;
+margin-bottom: 3px;
+}
+.level-body .level-desc {
+font-size: 13.5px;
+color: var(–muted);
+line-height: 1.45;
+}
+
+/* — Toggle rows (yes/no choice) — */
+.choice-row {
+display: flex;
+gap: 10px;
+margin-bottom: 28px;
+}
+.choice-btn {
+flex: 1;
+border: 1px solid var(–line-strong);
+background: #fff;
+border-radius: 10px;
+padding: 16px 14px;
+font-family: ‘Inter’, sans-serif;
+font-size: 14.5px;
+font-weight: 500;
+color: var(–ink);
+cursor: pointer;
+transition: border-color 0.2s, background 0.2s;
+text-align: left;
+}
+.choice-btn.selected {
+border-color: var(–sage);
+background: #F2F5F2;
+color: var(–sage);
+}
+.choice-btn .choice-title { display: block; margin-bottom: 2px; }
+.choice-btn .choice-sub { display: block; font-size: 12.5px; color: var(–muted); font-weight: 400; }
+.choice-btn.selected .choice-sub { color: var(–sage); opacity: 0.75; }
+
+/* — Form fields — */
+.field {
+margin-bottom: 20px;
+}
+.field label {
+display: block;
+font-size: 13px;
+font-weight: 500;
+color: var(–ink);
+margin-bottom: 7px;
+}
+.field .hint {
+font-size: 12.5px;
+color: var(–muted);
+margin-top: 6px;
+line-height: 1.4;
+}
+.field input[type=“number”], .field input[type=“text”] {
+width: 100%;
+border: 1px solid var(–line-strong);
+border-radius: 8px;
+padding: 13px 14px;
+background: #fff;
+color: var(–ink);
+font-family: ‘Inter’, sans-serif;
+}
+.field input:focus {
+outline: none;
+border-color: var(–clay);
+}
+
+/* — Summary screen — */
+.summary-card {
+border: 1px solid var(–line);
+border-radius: 10px;
+padding: 20px;
+background: #fff;
+margin-bottom: 14px;
+}
+.summary-row {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+padding: 10px 0;
+border-bottom: 1px solid var(–line);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row .label {
+font-size: 13.5px;
+color: var(–muted);
+}
+.summary-row .value {
+font-size: 14.5px;
+font-weight: 500;
+text-align: right;
+}
+
+/* — Buttons — */
+.btn-primary {
+width: 100%;
+background: var(–ink);
+color: var(–paper);
+border: none;
+border-radius: 10px;
+padding: 16px;
+font-family: ‘Inter’, sans-serif;
+font-size: 15.5px;
+font-weight: 600;
+cursor: pointer;
+transition: opacity 0.2s, transform 0.1s;
+}
+.btn-primary:active { transform: scale(0.985); }
+.btn-primary:disabled {
+background: var(–line-strong);
+color: var(–muted);
+cursor: not-allowed;
+}
+.btn-ghost {
+width: 100%;
+background: none;
+color: var(–muted);
+border: none;
+padding: 14px;
+font-family: ‘Inter’, sans-serif;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+margin-top: 6px;
+}
+
+/* — Welcome screen specific — */
+.welcome-mark {
+font-family: ‘Source Serif 4’, serif;
+font-style: italic;
+font-size: 15px;
+color: var(–clay);
+margin-bottom: 18px;
+}
+.welcome-visual {
+height: 120px;
+display: flex;
+align-items: center;
+gap: 6px;
+margin: 6px 0 32px;
+}
+.session-tick {
+width: 3px;
+background: var(–line-strong);
+border-radius: 2px;
+transition: background 0.3s;
+}
+.session-tick.active { background: var(–clay); }
+
+/* — Final/done screen — */
+.done-screen {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 40px 28px;
+}
+.done-mark {
+width: 56px; height: 56px;
+border-radius: 50%;
+background: var(–sage);
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 24px;
+font-size: 24px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="app" id="app"></div>
+
+<script>
+(function() {
+  const STORAGE_KEY = 'coach_reflect_setup_v1';
+
+  const LEVELS = [
+    { id: 'ACC', mark: 'ACC', name: 'Associate Certified Coach', desc: '100+ coaching hours · 60+ training hours' },
+    { id: 'PCC', mark: 'PCC', name: 'Professional Certified Coach', desc: '500+ coaching hours · 125+ training hours' },
+    { id: 'MCC', mark: 'MCC', name: 'Master Certified Coach', desc: '2,500+ coaching hours · 200+ training hours' },
+  ];
+
+  let state = {
+    step: 0,
+    level: null,
+    trackClients: null,
+    baselineHours: '',
+    baselineEduHours: '',
+    baselineEduPoints: ''
+  };
+
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try { state = Object.assign(state, JSON.parse(saved)); } catch(e) {}
+  }
+
+  const steps = ['welcome', 'level', 'clients', 'baseline', 'summary', 'done'];
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function go(delta) {
+    state.step += delta;
+    save();
+    render();
+  }
+
+  function setStep(name) {
+    state.step = steps.indexOf(name);
+    save();
+    render();
+  }
+
+  function render() {
+    const app = document.getElementById('app');
+    const stepName = steps[state.step];
+    const progressPct = Math.min(100, Math.round((state.step / (steps.length - 1)) * 100));
+
+    let topbar = '';
+    if (stepName !== 'welcome' && stepName !== 'done') {
+      const labels = { level: 'Step 1 of 3', clients: 'Step 2 of 3', baseline: 'Step 3 of 3', summary: 'Review' };
+      topbar = `
+        <div class="topbar">
+          <button class="back-btn visible" onclick="App.go(-1)">← Back</button>
+          <span class="step-label">${labels[stepName] || ''}</span>
+        </div>`;
+    }
+
+    let body = '';
+    if (stepName === 'welcome') body = renderWelcome();
+    else if (stepName === 'level') body = renderLevel();
+    else if (stepName === 'clients') body = renderClients();
+    else if (stepName === 'baseline') body = renderBaseline();
+    else if (stepName === 'summary') body = renderSummary();
+    else if (stepName === 'done') body = renderDone();
+
+    app.innerHTML = `
+      <div class="timeline"><div class="timeline-fill" style="width:${stepName === 'welcome' ? 0 : progressPct}%"></div></div>
+      ${topbar}
+      ${body}
+    `;
+  }
+
+  function renderWelcome() {
+    let ticks = '';
+    for (let i = 0; i < 24; i++) {
+      const h = 30 + Math.sin(i * 0.5) * 40 + Math.random() * 20;
+      ticks += `<div class="session-tick ${i < 10 ? 'active' : ''}" style="height:${h}px"></div>`;
+    }
+    return `
+      <div class="screen" style="justify-content:center;">
+        <div class="welcome-mark">A practice of reflection</div>
+        <h1>Before you coach again,<br>sit with how it went.</h1>
+        <p class="lede">A quiet space to debrief after every session, track your path toward ICF credentialing, and notice what you'd do differently next time.</p>
+        <div class="welcome-visual">${ticks}</div>
+        <div class="spacer"></div>
+        <button class="btn-primary" onclick="App.setStep('level')">Begin setup</button>
+      </div>`;
+  }
+
+  function renderLevel() {
+    const cards = LEVELS.map(l => `
+      <div class="level-card ${state.level === l.id ? 'selected' : ''}" onclick="App.selectLevel('${l.id}')">
+        <div class="level-mark">${l.mark}</div>
+        <div class="level-body">
+          <div class="level-name">${l.name}</div>
+          <div class="level-desc">${l.desc}</div>
+        </div>
+      </div>`).join('');
+
+    return `
+      <div class="screen">
+        <div class="eyebrow">Credential target</div>
+        <h1>Which level are you working toward?</h1>
+        <p class="lede">This decides which ICF competency checklist and hour requirements you'll see throughout the app. You can change this later.</p>
+        ${cards}
+        <div class="spacer"></div>
+        <button class="btn-primary" ${!state.level ? 'disabled' : ''} onclick="App.go(1)">Continue</button>
+      </div>`;
+  }
+
+  function renderClients() {
+    return `
+      <div class="screen">
+        <div class="eyebrow">Confidentiality</div>
+        <h1>Track relationships over time?</h1>
+        <p class="lede">Coaching conversations are confidential — we never ask for client names. You can optionally use anonymized codes to follow how one relationship evolves across sessions.</p>
+        <div class="choice-row" style="flex-direction:column;">
+          <button class="choice-btn ${state.trackClients === true ? 'selected' : ''}" onclick="App.selectClients(true)">
+            <span class="choice-title">Yes, use anonymized codes</span>
+            <span class="choice-sub">e.g. "Client 03" — no names, ever</span>
+          </button>
+          <button class="choice-btn ${state.trackClients === false ? 'selected' : ''}" onclick="App.selectClients(false)">
+            <span class="choice-title">No, keep sessions standalone</span>
+            <span class="choice-sub">Reflect on each session without linking them</span>
+          </button>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-primary" ${state.trackClients === null ? 'disabled' : ''} onclick="App.go(1)">Continue</button>
+      </div>`;
+  }
+
+  function renderBaseline() {
+    return `
+      <div class="screen">
+        <div class="eyebrow">Starting point</div>
+        <h1>What have you already logged elsewhere?</h1>
+        <p class="lede">If you're already coaching or training, enter what you've accumulated so far. Leave blank if you're starting fresh — you can always add past hours later.</p>
+        <div class="field">
+          <label>Coaching hours to date</label>
+          <input type="number" inputmode="decimal" min="0" placeholder="0" value="${state.baselineHours}" oninput="App.update('baselineHours', this.value)">
+        </div>
+        <div class="field">
+          <label>Training / education hours to date</label>
+          <input type="number" inputmode="decimal" min="0" placeholder="0" value="${state.baselineEduHours}" oninput="App.update('baselineEduHours', this.value)">
+        </div>
+        <div class="field">
+          <label>Credential units (CCEUs) earned so far</label>
+          <input type="number" inputmode="decimal" min="0" placeholder="0" value="${state.baselineEduPoints}" oninput="App.update('baselineEduPoints', this.value)">
+          <div class="hint">You'll log each education activity individually later — this is just your running total so far.</div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-primary" onclick="App.go(1)">Continue</button>
+      </div>`;
+  }
+
+  function renderSummary() {
+    const lvl = LEVELS.find(l => l.id === state.level);
+    return `
+      <div class="screen">
+        <div class="eyebrow">Review</div>
+        <h1>Here's your setup.</h1>
+        <p class="lede">You can change any of this later from settings.</p>
+        <div class="summary-card">
+          <div class="summary-row"><span class="label">Target level</span><span class="value">${lvl ? lvl.name : '—'}</span></div>
+          <div class="summary-row"><span class="label">Client tracking</span><span class="value">${state.trackClients ? 'Anonymized codes' : 'Standalone sessions'}</span></div>
+          <div class="summary-row"><span class="label">Coaching hours so far</span><span class="value">${state.baselineHours || '0'}</span></div>
+          <div class="summary-row"><span class="label">Training hours so far</span><span class="value">${state.baselineEduHours || '0'}</span></div>
+          <div class="summary-row"><span class="label">CCEUs earned so far</span><span class="value">${state.baselineEduPoints || '0'}</span></div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-primary" onclick="App.finish()">Confirm and start</button>
+      </div>`;
+  }
+
+  function renderDone() {
+    return `
+      <div class="done-screen">
+        <div class="done-mark">✓</div>
+        <h1>You're set up.</h1>
+        <p class="lede">Your first session reflection is just one log away. This part of the app — session logging and reflection — comes next.</p>
+      </div>`;
+  }
+
+  window.App = {
+    go,
+    setStep,
+    selectLevel(id) { state.level = id; save(); render(); },
+    selectClients(val) { state.trackClients = val; save(); render(); },
+    update(key, val) { state[key] = val; save(); },
+    finish() { setStep('done'); }
+  };
+
+  render();
+})();
+</script>
+
+</body>
+</html>
