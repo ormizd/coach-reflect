@@ -1448,72 +1448,84 @@ const ICF_CRITERIA = {
     const checklist = s.checklist || {};
     const hasAnyChecked = countChecked(checklist) > 0;
     const hasMindsetNotes = s.mindsetNotes && Object.values(s.mindsetNotes).some(v => v && v.trim());
+    // Only show if the coach actually engaged with the checklist
     if (!hasAnyChecked && !hasMindsetNotes) return '';
 
-    let lastDomain = null;
-    const compsHtml = ICF_COMPETENCY_META.map(meta => {
-      const compData = crit.competencies[meta.id];
-      const compChecked = checklist[meta.id] || {};
-      const mindsetNote = s.mindsetNotes && s.mindsetNotes[meta.id];
+    function renderCompItems(filterFn) {
+      let lastDomain = null;
+      return ICF_COMPETENCY_META.map(meta => {
+        const compData = crit.competencies[meta.id];
+        if (compData.reflectionOnly) return '';
+        const compChecked = checklist[meta.id] || {};
 
-      if (compData.reflectionOnly) {
-        if (!mindsetNote) return '';
-      } else {
-        const anyChecked = compData.items.some((item, idx) => {
+        const matchingItems = compData.items.filter((item, idx) => {
           const key = (typeof item === 'object' && item.id) ? item.id : String(idx);
-          return !!compChecked[key];
+          return filterFn(!!compChecked[key]);
         });
-        if (!anyChecked) return '';
-      }
+        if (matchingItems.length === 0) return '';
 
-      let domainHtml = '';
-      if (meta.domain !== lastDomain) {
-        domainHtml = `<div class="domain-label">${meta.domain}</div>`;
-        lastDomain = meta.domain;
-      }
+        let domainHtml = '';
+        if (meta.domain !== lastDomain) {
+          domainHtml = '<div class="domain-label">' + meta.domain + '</div>';
+          lastDomain = meta.domain;
+        }
 
-      let itemsHtml = '';
-      if (compData.reflectionOnly) {
-        itemsHtml = `<div class="comp-note">${compData.note}</div>
-          <div class="ar-a" style="font-size:13.5px;line-height:1.5;">${escapeHtml(mindsetNote)}</div>`;
-      } else {
-        itemsHtml = compData.items.map((item, idx) => {
+        const isCheckedSection = filterFn(true);
+        const itemsHtml = matchingItems.map(item => {
           const isObj = typeof item === 'object';
           const text = isObj ? item.text : item;
           const markerId = isObj ? item.id : null;
-          const key = markerId || String(idx);
-          const checked = !!compChecked[key];
-          if (!checked) return '';
-          return `
-            <div class="check-item" style="cursor:default;">
-              <div class="check-box checked">✓</div>
-              <div class="check-text">${markerId ? `<span class="marker-id">${markerId}</span>` : ''}${text}</div>
-            </div>`;
+          return '<div class="check-item" style="cursor:default;">' +
+            '<div class="check-box ' + (isCheckedSection ? 'checked' : '') + '">' + (isCheckedSection ? '&#10003;' : '') + '</div>' +
+            '<div class="check-text">' + (markerId ? '<span class="marker-id">' + markerId + '</span>' : '') + text + '</div>' +
+            '</div>';
         }).join('');
-      }
 
-      return `
-        ${domainHtml}
-        <div class="comp-card">
-          <div class="comp-header" style="cursor:default;">
-            <div class="ch-left">
-              <div class="comp-num">${meta.id}</div>
-              <div class="comp-name">${meta.name}</div>
-            </div>
-          </div>
-          <div class="comp-body open">${itemsHtml}</div>
-        </div>`;
-    }).join('');
+        return domainHtml +
+          '<div class="comp-card">' +
+            '<div class="comp-header" style="cursor:default;">' +
+              '<div class="ch-left">' +
+                '<div class="comp-num">' + meta.id + '</div>' +
+                '<div class="comp-name">' + meta.name + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="comp-body open">' + itemsHtml + '</div>' +
+          '</div>';
+      }).join('');
+    }
 
-    if (!compsHtml.trim()) return '';
+    const mindsetNote = s.mindsetNotes && s.mindsetNotes[2];
+    const mindsetNoteHtml = mindsetNote ? (() => {
+      const compData = crit.competencies[2];
+      return '<div class="comp-card">' +
+        '<div class="comp-header" style="cursor:default;">' +
+          '<div class="ch-left"><div class="comp-num">2</div><div class="comp-name">Embodies a Coaching Mindset</div></div>' +
+        '</div>' +
+        '<div class="comp-body open">' +
+          '<div class="comp-note">' + compData.note + '</div>' +
+          '<div class="ar-a" style="font-size:13.5px;line-height:1.5;">' + escapeHtml(mindsetNote) + '</div>' +
+        '</div></div>';
+    })() : '';
 
-    return `
-      <div class="section-label" style="padding:0;margin-top:24px;">ICF self-assessment — what you noticed</div>
-      <p style="font-size:13px;color:var(--muted);margin:0 0 14px;">Items you checked during this session\'s ${level} checklist.</p>
-      ${compsHtml}
-    `;
+    const checkedHtml = renderCompItems(v => v);
+    const uncheckedHtml = renderCompItems(v => !v);
+
+    let out = '';
+
+    if (checkedHtml.trim() || mindsetNoteHtml) {
+      out += '<div class="section-label" style="padding:0;margin-top:24px;">What you noticed</div>' +
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;">ICF ' + level + ' behaviors you observed in this session.</p>' +
+        checkedHtml + mindsetNoteHtml;
+    }
+
+    if (uncheckedHtml.trim()) {
+      out += '<div class="section-label" style="padding:0;margin-top:28px;">Areas to work on</div>' +
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;">ICF ' + level + ' behaviors you did not check — consider these for your next session.</p>' +
+        uncheckedHtml;
+    }
+
+    return out;
   }
-
   function renderSessionDetail() {
     return renderDebrief();
   }
