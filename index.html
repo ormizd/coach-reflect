@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Reflective Practice — Setup</title>
+<title>Reflective Practice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,330 +18,949 @@
     --line-strong: #D8D0C0;
   }
 
-- { box-sizing: border-box; }
+  * { box-sizing: border-box; }
 
-html, body {
-margin: 0;
-padding: 0;
-background: var(–paper);
-color: var(–ink);
-font-family: ‘Inter’, system-ui, sans-serif;
--webkit-font-smoothing: antialiased;
-overscroll-behavior-y: none;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
 
-body {
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-}
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-input, select, button, textarea { font-size: 16px; }
+  input, select, button, textarea { font-size: 16px; }
 
-.app {
-max-width: 480px;
-width: 100%;
-margin: 0 auto;
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-position: relative;
-}
+  .app {
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
 
-/* — Session-timer progress signature — */
-.timeline {
-position: relative;
-height: 3px;
-background: var(–line);
-margin: 0;
-overflow: hidden;
-}
-.timeline-fill {
-position: absolute;
-top: 0; left: 0; height: 100%;
-background: var(–clay);
-transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
-}
+  /* --- Session-timer progress signature --- */
+  .timeline {
+    position: relative;
+    height: 3px;
+    background: var(--line);
+    margin: 0;
+    overflow: hidden;
+  }
+  .timeline-fill {
+    position: absolute;
+    top: 0; left: 0; height: 100%;
+    background: var(--clay);
+    transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  }
 
-.topbar {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 18px 24px 14px;
-}
-.topbar .step-label {
-font-size: 12px;
-letter-spacing: 0.06em;
-text-transform: uppercase;
-color: var(–muted);
-font-weight: 500;
-}
-.topbar .back-btn {
-background: none;
-border: none;
-color: var(–muted);
-font-family: ‘Inter’, sans-serif;
-font-size: 14px;
-cursor: pointer;
-padding: 4px 0;
-visibility: hidden;
-}
-.topbar .back-btn.visible { visibility: visible; }
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px 14px;
+  }
+  .topbar .step-label {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .topbar .back-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 0;
+    visibility: hidden;
+  }
+  .topbar .back-btn.visible { visibility: visible; }
 
-.screen {
-flex: 1;
-display: flex;
-flex-direction: column;
-padding: 8px 28px 28px;
-animation: rise 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
+  .screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 28px 28px;
+    animation: rise 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
 
-@keyframes rise {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-.eyebrow {
-font-size: 13px;
-color: var(–clay);
-font-weight: 600;
-letter-spacing: 0.04em;
-margin-bottom: 10px;
-}
+  .eyebrow {
+    font-size: 13px;
+    color: var(--clay);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
 
-h1 {
-font-family: ‘Source Serif 4’, serif;
-font-weight: 500;
-font-size: 28px;
-line-height: 1.25;
-margin: 0 0 10px;
-letter-spacing: -0.01em;
-}
+  h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.25;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
 
-.lede {
-font-size: 15.5px;
-line-height: 1.55;
-color: var(–muted);
-margin: 0 0 28px;
-}
+  .lede {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 28px;
+  }
 
-.spacer { flex: 1; }
+  .spacer { flex: 1; }
 
-/* — Level cards — */
-.level-card {
-border: 1px solid var(–line-strong);
-border-radius: 10px;
-padding: 18px 18px;
-margin-bottom: 12px;
-cursor: pointer;
-background: #fff;
-transition: border-color 0.2s, box-shadow 0.2s;
-display: flex;
-align-items: flex-start;
-gap: 14px;
-}
-.level-card:active { transform: scale(0.99); }
-.level-card.selected {
-border-color: var(–clay);
-box-shadow: 0 0 0 1px var(–clay);
-}
-.level-mark {
-font-family: ‘Source Serif 4’, serif;
-font-size: 20px;
-font-weight: 600;
-color: var(–clay);
-min-width: 44px;
-line-height: 1.3;
-}
-.level-body .level-name {
-font-weight: 600;
-font-size: 15.5px;
-margin-bottom: 3px;
-}
-.level-body .level-desc {
-font-size: 13.5px;
-color: var(–muted);
-line-height: 1.45;
-}
+  /* --- Level cards --- */
+  .level-card {
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 18px 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .level-card:active { transform: scale(0.99); }
+  .level-card.selected {
+    border-color: var(--clay);
+    box-shadow: 0 0 0 1px var(--clay);
+  }
+  .level-mark {
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--clay);
+    min-width: 44px;
+    line-height: 1.3;
+  }
+  .level-body .level-name {
+    font-weight: 600;
+    font-size: 15.5px;
+    margin-bottom: 3px;
+  }
+  .level-body .level-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
 
-/* — Toggle rows (yes/no choice) — */
-.choice-row {
-display: flex;
-gap: 10px;
-margin-bottom: 28px;
-}
-.choice-btn {
-flex: 1;
-border: 1px solid var(–line-strong);
-background: #fff;
-border-radius: 10px;
-padding: 16px 14px;
-font-family: ‘Inter’, sans-serif;
-font-size: 14.5px;
-font-weight: 500;
-color: var(–ink);
-cursor: pointer;
-transition: border-color 0.2s, background 0.2s;
-text-align: left;
-}
-.choice-btn.selected {
-border-color: var(–sage);
-background: #F2F5F2;
-color: var(–sage);
-}
-.choice-btn .choice-title { display: block; margin-bottom: 2px; }
-.choice-btn .choice-sub { display: block; font-size: 12.5px; color: var(–muted); font-weight: 400; }
-.choice-btn.selected .choice-sub { color: var(–sage); opacity: 0.75; }
+  /* --- Toggle rows (yes/no choice) --- */
+  .choice-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .choice-btn {
+    flex: 1;
+    border: 1px solid var(--line-strong);
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: left;
+  }
+  .choice-btn.selected {
+    border-color: var(--sage);
+    background: #F2F5F2;
+    color: var(--sage);
+  }
+  .choice-btn .choice-title { display: block; margin-bottom: 2px; }
+  .choice-btn .choice-sub { display: block; font-size: 12.5px; color: var(--muted); font-weight: 400; }
+  .choice-btn.selected .choice-sub { color: var(--sage); opacity: 0.75; }
 
-/* — Form fields — */
-.field {
-margin-bottom: 20px;
-}
-.field label {
-display: block;
-font-size: 13px;
-font-weight: 500;
-color: var(–ink);
-margin-bottom: 7px;
-}
-.field .hint {
-font-size: 12.5px;
-color: var(–muted);
-margin-top: 6px;
-line-height: 1.4;
-}
-.field input[type=“number”], .field input[type=“text”] {
-width: 100%;
-border: 1px solid var(–line-strong);
-border-radius: 8px;
-padding: 13px 14px;
-background: #fff;
-color: var(–ink);
-font-family: ‘Inter’, sans-serif;
-}
-.field input:focus {
-outline: none;
-border-color: var(–clay);
-}
+  /* --- Form fields --- */
+  .field {
+    margin-bottom: 20px;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 7px;
+  }
+  .field .hint {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .field input[type="number"], .field input[type="text"] {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 13px 14px;
+    background: #fff;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--clay);
+  }
 
-/* — Summary screen — */
-.summary-card {
-border: 1px solid var(–line);
-border-radius: 10px;
-padding: 20px;
-background: #fff;
-margin-bottom: 14px;
-}
-.summary-row {
-display: flex;
-justify-content: space-between;
-align-items: baseline;
-padding: 10px 0;
-border-bottom: 1px solid var(–line);
-}
-.summary-row:last-child { border-bottom: none; }
-.summary-row .label {
-font-size: 13.5px;
-color: var(–muted);
-}
-.summary-row .value {
-font-size: 14.5px;
-font-weight: 500;
-text-align: right;
-}
+  /* --- Summary screen --- */
+  .summary-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    background: #fff;
+    margin-bottom: 14px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .label {
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .summary-row .value {
+    font-size: 14.5px;
+    font-weight: 500;
+    text-align: right;
+  }
 
-/* — Buttons — */
-.btn-primary {
-width: 100%;
-background: var(–ink);
-color: var(–paper);
-border: none;
-border-radius: 10px;
-padding: 16px;
-font-family: ‘Inter’, sans-serif;
-font-size: 15.5px;
-font-weight: 600;
-cursor: pointer;
-transition: opacity 0.2s, transform 0.1s;
-}
-.btn-primary:active { transform: scale(0.985); }
-.btn-primary:disabled {
-background: var(–line-strong);
-color: var(–muted);
-cursor: not-allowed;
-}
-.btn-ghost {
-width: 100%;
-background: none;
-color: var(–muted);
-border: none;
-padding: 14px;
-font-family: ‘Inter’, sans-serif;
-font-size: 14px;
-font-weight: 500;
-cursor: pointer;
-margin-top: 6px;
-}
+  /* --- Buttons --- */
+  .btn-primary {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-primary:active { transform: scale(0.985); }
+  .btn-primary:disabled {
+    background: var(--line-strong);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    width: 100%;
+    background: none;
+    color: var(--muted);
+    border: none;
+    padding: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 6px;
+  }
 
-/* — Welcome screen specific — */
-.welcome-mark {
-font-family: ‘Source Serif 4’, serif;
-font-style: italic;
-font-size: 15px;
-color: var(–clay);
-margin-bottom: 18px;
-}
-.welcome-visual {
-height: 120px;
-display: flex;
-align-items: center;
-gap: 6px;
-margin: 6px 0 32px;
-}
-.session-tick {
-width: 3px;
-background: var(–line-strong);
-border-radius: 2px;
-transition: background 0.3s;
-}
-.session-tick.active { background: var(–clay); }
+  /* --- Welcome screen specific --- */
+  .welcome-mark {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--clay);
+    margin-bottom: 18px;
+  }
+  .welcome-visual {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0 32px;
+  }
+  .session-tick {
+    width: 3px;
+    background: var(--line-strong);
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .session-tick.active { background: var(--clay); }
 
-/* — Final/done screen — */
-.done-screen {
-flex: 1;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-text-align: center;
-padding: 40px 28px;
-}
-.done-mark {
-width: 56px; height: 56px;
-border-radius: 50%;
-background: var(–sage);
-color: #fff;
-display: flex;
-align-items: center;
-justify-content: center;
-margin-bottom: 24px;
-font-size: 24px;
-}
+  /* --- Final/done screen --- */
+  .done-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 28px;
+  }
+  .done-mark {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--sage);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 24px;
+  }
+
+  /* --- Home / dashboard --- */
+  .home-header {
+    padding: 24px 24px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .home-greeting {
+    font-family: 'Source Serif 4', serif;
+    font-size: 22px;
+    font-weight: 500;
+  }
+  .home-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .progress-card {
+    margin: 0 24px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    background: #fff;
+  }
+  .progress-card .pc-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .pc-bar-row { margin-bottom: 14px; }
+  .pc-bar-row:last-child { margin-bottom: 0; }
+  .pc-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .pc-bar-label .name { color: var(--ink); font-weight: 500; }
+  .pc-bar-label .nums { color: var(--muted); }
+  .pc-bar-track {
+    height: 6px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .pc-bar-fill {
+    height: 100%;
+    background: var(--clay);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .pc-bar-fill.sage { background: var(--sage); }
+
+  .section-label {
+    padding: 0 24px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 22px 0 10px;
+  }
+
+  .action-row {
+    display: flex;
+    gap: 10px;
+    padding: 0 24px;
+    margin-bottom: 8px;
+  }
+  .action-btn {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 18px 14px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .action-btn.secondary {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+  }
+  .action-btn .a-sub {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .session-list {
+    padding: 0 24px 24px;
+  }
+  .session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .session-item:last-child { border-bottom: none; }
+  .si-left .si-title { font-size: 14.5px; font-weight: 500; }
+  .si-left .si-meta { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .si-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: #F2F5F2;
+    color: var(--sage);
+  }
+  .si-badge.pending {
+    background: #FBF1EA;
+    color: var(--clay);
+  }
+  .empty-state {
+    padding: 36px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* --- Session log form --- */
+  .field-row { display: flex; gap: 10px; }
+  .field-row .field { flex: 1; }
+
+  .code-chip-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .code-chip {
+    border: 1px solid var(--line-strong);
+    background: #fff;
+    border-radius: 20px;
+    padding: 9px 16px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .code-chip.selected {
+    border-color: var(--sage);
+    background: #F2F5F2;
+    color: var(--sage);
+  }
+  .code-chip.add-new {
+    color: var(--clay);
+    border-style: dashed;
+  }
+
+  /* --- Reflection screen --- */
+  .reflect-q {
+    margin-bottom: 26px;
+  }
+  .reflect-q .q-num {
+    font-size: 12px;
+    color: var(--clay);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .reflect-q .q-text {
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  textarea.reflect-input {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 13px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    resize: vertical;
+    min-height: 64px;
+    line-height: 1.5;
+  }
+  textarea.reflect-input:focus { outline: none; border-color: var(--clay); }
+
+  .skip-note {
+    font-size: 12.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 4px;
+  }
+  .skip-note a { color: var(--clay); cursor: pointer; text-decoration: underline; }
+
+  /* --- Checklist --- */
+  .checklist-intro {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .caveat-box {
+    background: #FBF1EA;
+    border: 1px solid #EAD9C8;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #6B4A33;
+    line-height: 1.45;
+    margin-bottom: 20px;
+  }
+  .domain-label {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 18px 0 8px;
+  }
+  .domain-label:first-child { margin-top: 0; }
+
+  .comp-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .comp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+  .comp-header .ch-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .comp-num {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--clay);
+    min-width: 18px;
+  }
+  .comp-name { font-size: 14.5px; font-weight: 500; }
+  .comp-count {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .chevron {
+    color: var(--muted);
+    transition: transform 0.2s;
+    font-size: 12px;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  .comp-body {
+    padding: 0 16px 16px;
+    display: none;
+  }
+  .comp-body.open { display: block; }
+  .comp-note {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    cursor: pointer;
+  }
+  .check-box {
+    width: 19px; height: 19px;
+    border-radius: 5px;
+    border: 1.5px solid var(--line-strong);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: transparent;
+    transition: all 0.15s;
+  }
+  .check-box.checked {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: #fff;
+  }
+  .check-text {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .check-text .marker-id {
+    color: var(--muted);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .mindset-star {
+    color: var(--clay);
+    margin-left: 4px;
+  }
+  .mindset-key {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+  .reflection-only-box textarea { margin-top: 4px; }
+
+  /* --- Debrief summary --- */
+  .debrief-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .debrief-stat:last-child { border-bottom: none; }
+  .debrief-stat .ds-label { font-size: 13.5px; color: var(--muted); }
+  .debrief-stat .ds-value { font-size: 14.5px; font-weight: 600; }
+  .answer-recap {
+    margin-bottom: 16px;
+  }
+  .answer-recap .ar-q {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .answer-recap .ar-a {
+    font-size: 14px;
+    line-height: 1.5;
+  }
 </style>
-
 </head>
 <body>
 
 <div class="app" id="app"></div>
 
 <script>
+// ICF Core Competency checklist content by credential level.
+// Sourced directly from coachingfederation.org official documents (verified June 2026):
+// - ACC: "ACC Minimum Skills Requirements" rev. 1.26.2026
+// - PCC: "PCC Markers" Revised Nov 2020, rev. 06.25.21 (unchanged in 2025 update)
+// - MCC: "MCC Minimum Skills Requirements" rev. 1.26.2026
+//
+// Structural note: PCC uses a different document format (numbered markers) than
+// ACC/MCC (key skills + consistent/inconsistent behaviors). Both are normalized
+// here into a common `items` shape for consistent UI rendering.
+//
+// Competency 2 (Embodies a Coaching Mindset) has no standalone behavioral checklist
+// at ANY level per ICF — it's evaluated via written exam only. For PCC, ICF explicitly
+// states it is instead embodied through specific markers in other competencies
+// (4.1, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.5, 7.1, 7.5) — those are tagged with
+// `mindsetMarker: true` below. For ACC/MCC, no such cross-reference exists in the
+// source documents, so Competency 2 is rendered as a reflection-only prompt.
+
+const ICF_COMPETENCY_META = [
+  { id: 1, name: "Demonstrates Ethical Practice", domain: "Foundation" },
+  { id: 2, name: "Embodies a Coaching Mindset", domain: "Foundation" },
+  { id: 3, name: "Establishes and Maintains Agreements", domain: "Co-Creating the Relationship" },
+  { id: 4, name: "Cultivates Trust and Safety", domain: "Co-Creating the Relationship" },
+  { id: 5, name: "Maintains Presence", domain: "Co-Creating the Relationship" },
+  { id: 6, name: "Listens Actively", domain: "Communicating Effectively" },
+  { id: 7, name: "Evokes Awareness", domain: "Communicating Effectively" },
+  { id: 8, name: "Facilitates Client Growth", domain: "Cultivating Learning and Growth" },
+];
+
+const ICF_CRITERIA = {
+
+  ACC: {
+    levelName: "Associate Certified Coach",
+    sourceLabel: "ACC Minimum Skills Requirements (rev. 1.26.2026)",
+    competencies: {
+      1: {
+        note: "Familiarity with the ICF Code of Ethics and its application is required for all levels of coaching.",
+        items: [
+          "Demonstrated a strong understanding and alignment with the ICF Code of Ethics",
+          "Consistently stayed in the role of coach — structured the conversation and stayed focused on present and future issues",
+          "Used key coaching skills (trust, presence, active listening, evoking awareness) to facilitate the client's own insights, rather than consulting or therapeutic mode",
+        ],
+      },
+      2: {
+        note: "Evaluated only through the ICF ACC Exam — there's no behavioral checklist for this competency in a session. Use the space below to reflect on it in your own words.",
+        items: [],
+        reflectionOnly: true,
+      },
+      3: {
+        items: [
+          "Explored the client's topic with them",
+          "Reached agreement with the client on what they wanted to accomplish as a session outcome",
+          "Explored the significance of the outcome to the client",
+          "Attended to the agreed-upon agenda throughout the session",
+        ],
+      },
+      4: {
+        items: [
+          "Acknowledged the client's work in the session",
+          "Expressed respect, support, or concern for the client",
+          "Supported the client's expression of feelings, perceptions, concerns, or beliefs",
+        ],
+      },
+      5: {
+        items: [
+          "Was observant and responsive to the client",
+          "Demonstrated curiosity about the client, their agenda, or both",
+          "Provided space for the client to lead during the session",
+          "Stayed silent to allow time for the client to reflect",
+        ],
+      },
+      6: {
+        items: [
+          "Listened by recognizing feelings, perceptions, challenges, or beliefs",
+          "Inquired about, explored, or included the client's own language",
+          "Summarized or paraphrased what the client communicated to confirm understanding",
+        ],
+      },
+      7: {
+        items: [
+          "Supported the client in viewing the situation from different perspectives",
+          "Inquired about the client's feelings, perceptions, behaviors, or beliefs",
+          "Asked clear, open-ended questions, one at a time",
+        ],
+      },
+      8: {
+        items: [
+          "Asked questions about what the client learned during the session",
+          "Supported the client in using their learning to plan next steps",
+          "Supported the client in closing the session themselves",
+        ],
+      },
+    },
+  },
+
+  PCC: {
+    levelName: "Professional Certified Coach",
+    sourceLabel: "PCC Markers (Revised Nov 2020, rev. 06.25.21)",
+    caveat: "ICF notes these markers should not be used as a formulaic checklist for passing an evaluation — they're meant to support reflection and ongoing competency development.",
+    competencies: {
+      1: {
+        note: "Familiarity with the ICF Code of Ethics is required at all levels. Successful PCC candidates remain consistent in the role of coach.",
+        items: [
+          "Demonstrated coaching aligned with the ICF Code of Ethics",
+          "Remained consistently in the role of coach throughout the session",
+        ],
+      },
+      2: {
+        note: "No standalone marker — ICF states this competency is instead embodied through specific markers across other competencies (flagged with a ★ below), plus the written Coach Knowledge Assessment.",
+        items: [],
+        reflectionOnly: true,
+      },
+      3: {
+        items: [
+          { id: "3.1", text: "Partnered with the client to identify or reconfirm what they wanted to accomplish in the session" },
+          { id: "3.2", text: "Partnered with the client to define or reconfirm measure(s) of success for the session" },
+          { id: "3.3", text: "Explored what was important or meaningful to the client about what they wanted to accomplish" },
+          { id: "3.4", text: "Partnered with the client to define what they believed they needed to address" },
+        ],
+      },
+      4: {
+        items: [
+          { id: "4.1", text: "Acknowledged and respected the client's unique talents, insights and work", mindsetMarker: true },
+          { id: "4.2", text: "Showed support, empathy or concern for the client" },
+          { id: "4.3", text: "Acknowledged and supported the client's expression of feelings, perceptions, concerns, beliefs or suggestions", mindsetMarker: true },
+          { id: "4.4", text: "Invited the client to respond to the coach's contributions and accepted their response", mindsetMarker: true },
+        ],
+      },
+      5: {
+        items: [
+          { id: "5.1", text: "Acted in response to the whole person of the client (the who)", mindsetMarker: true },
+          { id: "5.2", text: "Acted in response to what the client wanted to accomplish in the session (the what)", mindsetMarker: true },
+          { id: "5.3", text: "Supported the client to choose what happens in the session", mindsetMarker: true },
+          { id: "5.4", text: "Demonstrated curiosity to learn more about the client", mindsetMarker: true },
+          { id: "5.5", text: "Allowed for silence, pause, or reflection" },
+        ],
+      },
+      6: {
+        items: [
+          { id: "6.1", text: "Customized questions and observations using what was learned about the client", mindsetMarker: true },
+          { id: "6.2", text: "Explored the words the client used" },
+          { id: "6.3", text: "Explored the client's emotions" },
+          { id: "6.4", text: "Explored energy shifts, nonverbal cues, or other behaviors" },
+          { id: "6.5", text: "Explored how the client currently perceives themself or their world", mindsetMarker: true },
+          { id: "6.6", text: "Allowed the client to finish speaking without interrupting" },
+          { id: "6.7", text: "Succinctly reflected or summarized what the client communicated" },
+        ],
+      },
+      7: {
+        items: [
+          { id: "7.1", text: "Asked questions about the client's current thinking, feeling, values, needs, wants, beliefs or behavior", mindsetMarker: true },
+          { id: "7.2", text: "Asked questions to help the client explore new ways of thinking or feeling about themself" },
+          { id: "7.3", text: "Asked questions to help the client explore new ways of thinking or feeling about their situation" },
+          { id: "7.4", text: "Asked questions to help the client explore toward their desired outcome" },
+          { id: "7.5", text: "Shared observations or intuitions without attachment, inviting the client's exploration", mindsetMarker: true },
+          { id: "7.6", text: "Asked clear, direct, open-ended questions, one at a time, at a pace that allowed reflection" },
+          { id: "7.7", text: "Used language that was generally clear and concise" },
+          { id: "7.8", text: "Allowed the client to do most of the talking" },
+        ],
+      },
+      8: {
+        items: [
+          { id: "8.1", text: "Invited the client to explore progress toward what they wanted to accomplish" },
+          { id: "8.2", text: "Invited the client to explore their learning about themself" },
+          { id: "8.3", text: "Invited the client to explore their learning about their situation" },
+          { id: "8.4", text: "Invited the client to consider how they'll use this new learning" },
+          { id: "8.5", text: "Partnered with the client to design post-session thinking, reflection, or action" },
+          { id: "8.6", text: "Partnered with the client to consider how to move forward, including resources and barriers" },
+          { id: "8.7", text: "Partnered with the client to design their own methods of accountability" },
+          { id: "8.8", text: "Celebrated the client's progress and learning" },
+          { id: "8.9", text: "Partnered with the client on how they wanted to complete the session" },
+        ],
+      },
+    },
+  },
+
+  MCC: {
+    levelName: "Master Certified Coach",
+    sourceLabel: "MCC Minimum Skills Requirements (rev. 1.26.2026)",
+    competencies: {
+      1: {
+        note: "Familiarity with the ICF Code of Ethics and its application is required for all levels of coaching.",
+        items: [
+          "Demonstrated a strong understanding and alignment with the ICF Code of Ethics",
+          "Consistently stayed in the role of coach — structured the conversation and stayed focused on present and future issues",
+          "Used key coaching skills (trust, presence, active listening, evoking awareness) to facilitate the client's own insights",
+        ],
+      },
+      2: {
+        note: "Evaluated only through the ICF Credentialing Exam — there's no behavioral checklist for this competency in a session. Use the space below to reflect on it in your own words.",
+        items: [],
+        reflectionOnly: true,
+      },
+      3: {
+        items: [
+          "Partnered with the client to identify the focus of the session",
+          "Explored and clarified several aspects of the topic",
+          "Confirmed mutual understanding of the client's desired session outcome",
+          "Noticed possible shifts emerging and clarified the desired direction with the client",
+        ],
+      },
+      4: {
+        items: [
+          "Acknowledged the client's learning or growth at any moment in the session",
+          "Recognized the client's emotions, strengths, or other unique characteristics",
+          "Invited the client to share more about themselves, their perspectives, or their identity",
+          "Demonstrated empathy for what the client expressed",
+        ],
+      },
+      5: {
+        items: [
+          "Responded holistically to the client in a way that kept the conversation flowing",
+          "Partnered with the client in ways that supported their needs",
+          "Consistently demonstrated curiosity",
+          "Created space for silence, pause, or reflection",
+        ],
+      },
+      6: {
+        items: [
+          "Recognized the nuances of language, emotion, energy, or behavior in relation to the client's agenda",
+          "Responded in a way that showed understanding of the client's thinking, feeling, or insight in the moment",
+          "Explored what the client communicated in relation to multiple dimensions of themselves",
+        ],
+      },
+      7: {
+        items: [
+          "Partnered with the client to explore and expand their perspective",
+          "Shared insights, sensations, or observations that supported new or expanded awareness",
+          "Stimulated new insight with succinct, open-ended questions, one at a time",
+        ],
+      },
+      8: {
+        items: [
+          "Invited the client to reflect on what they learned about themselves from the conversation",
+          "Partnered with the client to translate insights or learning into actions",
+          "Partnered with the client to complete the session",
+        ],
+      },
+    },
+  },
+};
+
 (function() {
   const STORAGE_KEY = 'coach_reflect_setup_v1';
+  const SESSIONS_KEY = 'coach_reflect_sessions_v1';
+  const CODES_KEY = 'coach_reflect_codes_v1';
 
   const LEVELS = [
     { id: 'ACC', mark: 'ACC', name: 'Associate Certified Coach', desc: '100+ coaching hours · 60+ training hours' },
     { id: 'PCC', mark: 'PCC', name: 'Professional Certified Coach', desc: '500+ coaching hours · 125+ training hours' },
     { id: 'MCC', mark: 'MCC', name: 'Master Certified Coach', desc: '2,500+ coaching hours · 200+ training hours' },
+  ];
+
+  const LEVEL_TARGETS = {
+    ACC: { hours: 100, eduHours: 60 },
+    PCC: { hours: 500, eduHours: 125 },
+    MCC: { hours: 2500, eduHours: 200 },
+  };
+
+  const REFLECTION_QUESTIONS = [
+    { key: 'goal', text: "What was your goal for this session?" },
+    { key: 'accomplished', text: "Did you accomplish that goal?" },
+    { key: 'missed', text: "What did you miss, or what do you need to work on?" },
+    { key: 'nextGoal', text: "What's your goal for the next session?" },
   ];
 
   let state = {
@@ -359,10 +977,30 @@ font-size: 24px;
     try { state = Object.assign(state, JSON.parse(saved)); } catch(e) {}
   }
 
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem(SESSIONS_KEY)) || []; } catch(e) { sessions = []; }
+
+  let clientCodes = [];
+  try { clientCodes = JSON.parse(localStorage.getItem(CODES_KEY)) || []; } catch(e) { clientCodes = []; }
+
+  // ui holds transient/navigation state that doesn't need the setup save() call
+  let ui = {
+    screen: state.step < 5 ? 'setup' : 'home',
+    draft: null,        // in-progress session/reflection draft
+    openComp: null,     // which competency card is expanded on checklist
+    viewingSessionId: null,
+  };
+
   const steps = ['welcome', 'level', 'clients', 'baseline', 'summary', 'done'];
 
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+  function saveSessions() {
+    localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+  }
+  function saveCodes() {
+    localStorage.setItem(CODES_KEY, JSON.stringify(clientCodes));
   }
 
   function go(delta) {
@@ -379,6 +1017,24 @@ font-size: 24px;
 
   function render() {
     const app = document.getElementById('app');
+
+    if (ui.screen === 'setup') {
+      renderSetup(app);
+      return;
+    }
+
+    let html = '';
+    if (ui.screen === 'home') html = renderHome();
+    else if (ui.screen === 'logSession') html = renderLogSession();
+    else if (ui.screen === 'reflect') html = renderReflect();
+    else if (ui.screen === 'checklist') html = renderChecklist();
+    else if (ui.screen === 'debrief') html = renderDebrief();
+    else if (ui.screen === 'sessionDetail') html = renderSessionDetail();
+
+    app.innerHTML = html;
+  }
+
+  function renderSetup(app) {
     const stepName = steps[state.step];
     const progressPct = Math.min(100, Math.round((state.step / (steps.length - 1)) * 100));
 
@@ -514,17 +1170,427 @@ font-size: 24px;
       <div class="done-screen">
         <div class="done-mark">✓</div>
         <h1>You're set up.</h1>
-        <p class="lede">Your first session reflection is just one log away. This part of the app — session logging and reflection — comes next.</p>
+        <p class="lede">Your first session reflection is just one log away.</p>
+        <button class="btn-primary" style="margin-top:8px;" onclick="App.goHome()">Go to your dashboard</button>
       </div>`;
   }
 
+  // ============== HOME ==============
+
+  function totalHours() {
+    const logged = sessions.reduce((sum, s) => sum + (parseFloat(s.duration) || 0), 0);
+    return logged + (parseFloat(state.baselineHours) || 0);
+  }
+  function totalEduHours() {
+    return parseFloat(state.baselineEduHours) || 0;
+  }
+
+  function renderHome() {
+    const target = LEVEL_TARGETS[state.level] || { hours: 1, eduHours: 1 };
+    const hrs = totalHours();
+    const eduHrs = totalEduHours();
+    const hrsPct = Math.min(100, Math.round((hrs / target.hours) * 100));
+    const eduPct = Math.min(100, Math.round((eduHrs / target.eduHours) * 100));
+
+    const lvl = LEVELS.find(l => l.id === state.level);
+    const recent = sessions.slice().reverse().slice(0, 8);
+
+    let listHtml = '';
+    if (recent.length === 0) {
+      listHtml = `<div class="empty-state">No sessions logged yet. Log your first one above — reflection is optional, the log isn't.</div>`;
+    } else {
+      listHtml = `<div class="session-list">` + recent.map(s => {
+        const codeLabel = s.clientCode ? s.clientCode : 'Standalone session';
+        const hasReflection = !!s.reflection;
+        return `
+        <div class="session-item" onclick="App.viewSession('${s.id}')">
+          <div class="si-left">
+            <div class="si-title">${codeLabel}</div>
+            <div class="si-meta">${formatDate(s.date)} · ${s.duration} hr${s.duration == 1 ? '' : 's'}</div>
+          </div>
+          <span class="si-badge ${hasReflection ? '' : 'pending'}">${hasReflection ? 'Reflected' : 'No reflection'}</span>
+        </div>`;
+      }).join('') + `</div>`;
+    }
+
+    return `
+      <div class="home-header">
+        <div>
+          <div class="home-greeting">Your practice</div>
+          <div class="home-sub">${lvl ? lvl.name + ' track' : ''}</div>
+        </div>
+        <div class="icon-btn" onclick="App.setStep('level')" title="Settings">⚙</div>
+      </div>
+
+      <div class="progress-card">
+        <div class="pc-title">Progress toward ${state.level || 'your level'}</div>
+        <div class="pc-bar-row">
+          <div class="pc-bar-label"><span class="name">Coaching hours</span><span class="nums">${hrs.toFixed(1)} / ${target.hours}</span></div>
+          <div class="pc-bar-track"><div class="pc-bar-fill" style="width:${hrsPct}%"></div></div>
+        </div>
+        <div class="pc-bar-row">
+          <div class="pc-bar-label"><span class="name">Training hours</span><span class="nums">${eduHrs.toFixed(1)} / ${target.eduHours}</span></div>
+          <div class="pc-bar-track"><div class="pc-bar-fill sage" style="width:${eduPct}%"></div></div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="action-btn" onclick="App.startLogSession()">Log a session<span class="a-sub">Add hours, reflect if you want</span></button>
+      </div>
+
+      <div class="section-label">Recent sessions</div>
+      ${listHtml}
+    `;
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  // ============== LOG SESSION ==============
+
+  function renderLogSession() {
+    const d = ui.draft;
+    const chips = clientCodes.map(c => `
+      <div class="code-chip ${d.clientCode === c ? 'selected' : ''}" onclick="App.pickCode('${c}')">${c}</div>
+    `).join('');
+
+    return `
+      <div class="screen">
+        <div class="topbar" style="padding-left:0;padding-right:0;">
+          <button class="back-btn visible" onclick="App.cancelDraft()">← Cancel</button>
+          <span class="step-label">New session</span>
+        </div>
+        <div class="eyebrow">Log</div>
+        <h1>How long was the session?</h1>
+        <div class="field">
+          <label>Duration (hours)</label>
+          <input type="number" inputmode="decimal" min="0" step="0.25" placeholder="1" value="${d.duration}" oninput="App.updateDraft('duration', this.value)">
+        </div>
+
+        ${state.trackClients ? `
+        <div class="field">
+          <label>Client (optional)</label>
+          <div class="code-chip-row">
+            ${chips}
+            <div class="code-chip add-new" onclick="App.addNewCode()">+ New code</div>
+          </div>
+          <div class="hint">Anonymized codes only — never names.</div>
+        </div>` : ''}
+
+        <div class="spacer"></div>
+        <button class="btn-primary" ${!d.duration ? 'disabled' : ''} onclick="App.goToReflectChoice()">Continue</button>
+      </div>
+    `;
+  }
+
+  // ============== REFLECTION (5 questions) ==============
+
+  function renderReflect() {
+    const d = ui.draft;
+    const qBlocks = REFLECTION_QUESTIONS.map((q, i) => `
+      <div class="reflect-q">
+        <div class="q-num">Question ${i + 1} of ${REFLECTION_QUESTIONS.length + 1}</div>
+        <div class="q-text">${q.text}</div>
+        <textarea class="reflect-input" placeholder="Write as much or as little as you like…" oninput="App.updateReflection('${q.key}', this.value)">${d.reflection[q.key] || ''}</textarea>
+      </div>
+    `).join('');
+
+    return `
+      <div class="screen">
+        <div class="topbar" style="padding-left:0;padding-right:0;">
+          <button class="back-btn visible" onclick="App.backToLog()">← Back</button>
+          <span class="step-label">Reflection</span>
+        </div>
+        <div class="eyebrow">Post-session</div>
+        <h1>Take a moment to reflect.</h1>
+        <p class="lede">This is just for you. Skip anything that doesn't fit this session.</p>
+        ${qBlocks}
+        <div class="spacer"></div>
+        <button class="btn-primary" onclick="App.goToChecklist()">Continue to ICF checklist</button>
+        <p class="skip-note"><a onclick="App.skipToSave()">Skip the checklist and save</a></p>
+      </div>
+    `;
+  }
+
+  // ============== ICF CHECKLIST ==============
+
+  function renderChecklist() {
+    const level = state.level || 'PCC';
+    const crit = ICF_CRITERIA[level];
+    const d = ui.draft;
+
+    let caveatHtml = '';
+    if (crit.caveat) {
+      caveatHtml = `<div class="caveat-box">ICF's own note: ${crit.caveat}</div>`;
+    }
+
+    let lastDomain = null;
+    const cards = ICF_COMPETENCY_META.map(meta => {
+      const compData = crit.competencies[meta.id];
+      const isOpen = ui.openComp === meta.id;
+      const checkedSet = d.checklist[level] && d.checklist[level][meta.id] ? d.checklist[level][meta.id] : {};
+
+      let domainHtml = '';
+      if (meta.domain !== lastDomain) {
+        domainHtml = `<div class="domain-label">${meta.domain}</div>`;
+        lastDomain = meta.domain;
+      }
+
+      let bodyHtml = '';
+      if (compData.reflectionOnly) {
+        bodyHtml = `
+          <div class="comp-note">${compData.note}</div>
+          <div class="reflection-only-box">
+            <textarea class="reflect-input" placeholder="A quick note on this, if useful…" oninput="App.updateMindsetNote(${meta.id}, this.value)">${d.mindsetNotes && d.mindsetNotes[meta.id] || ''}</textarea>
+          </div>
+        `;
+      } else {
+        const noteHtml = compData.note ? `<div class="comp-note">${compData.note}</div>` : '';
+        const itemsHtml = compData.items.map((item, idx) => {
+          const isObj = typeof item === 'object';
+          const text = isObj ? item.text : item;
+          const markerId = isObj ? item.id : null;
+          const isMindset = isObj && item.mindsetMarker;
+          const key = markerId || String(idx);
+          const checked = !!checkedSet[key];
+          return `
+            <div class="check-item" onclick="App.toggleCheck(${meta.id}, '${key}')">
+              <div class="check-box ${checked ? 'checked' : ''}">${checked ? '✓' : ''}</div>
+              <div class="check-text">${markerId ? `<span class="marker-id">${markerId}</span>` : ''}${text}${isMindset ? '<span class="mindset-star">★</span>' : ''}</div>
+            </div>
+          `;
+        }).join('');
+        const hasMindsetMarkers = compData.items.some(it => typeof it === 'object' && it.mindsetMarker);
+        const mindsetKey = hasMindsetMarkers ? `<div class="mindset-key">★ also reflects Competency 2, Embodies a Coaching Mindset — per ICF's own cross-reference</div>` : '';
+        bodyHtml = noteHtml + itemsHtml + mindsetKey;
+      }
+
+      return `
+        ${domainHtml}
+        <div class="comp-card">
+          <div class="comp-header" onclick="App.toggleComp(${meta.id})">
+            <div class="ch-left">
+              <div class="comp-num">${meta.id}</div>
+              <div class="comp-name">${meta.name}</div>
+            </div>
+            <div class="chevron ${isOpen ? 'open' : ''}">▾</div>
+          </div>
+          <div class="comp-body ${isOpen ? 'open' : ''}">${bodyHtml}</div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="screen">
+        <div class="topbar" style="padding-left:0;padding-right:0;">
+          <button class="back-btn visible" onclick="App.backToReflect()">← Back</button>
+          <span class="step-label">${level} checklist</span>
+        </div>
+        <div class="eyebrow">Self-check</div>
+        <h1>How did this session measure up?</h1>
+        <p class="checklist-intro">Based on ICF's ${crit.sourceLabel}. This is for your own awareness, not a score — check what you noticed yourself doing.</p>
+        ${caveatHtml}
+        ${cards}
+        <div class="spacer"></div>
+        <button class="btn-primary" onclick="App.saveSession()">Save reflection</button>
+      </div>
+    `;
+  }
+
+  // ============== DEBRIEF / CONFIRMATION ==============
+
+  function renderDebrief() {
+    const s = sessions.find(x => x.id === ui.viewingSessionId) || sessions[sessions.length - 1];
+    if (!s) return renderHome();
+
+    const checkedCount = countChecked(s.checklist);
+    const totalCount = countTotal(s.level);
+
+    let recapHtml = '';
+    if (s.reflection) {
+      recapHtml = REFLECTION_QUESTIONS.map(q => {
+        const ans = s.reflection[q.key];
+        if (!ans) return '';
+        return `<div class="answer-recap"><div class="ar-q">${q.text}</div><div class="ar-a">${escapeHtml(ans)}</div></div>`;
+      }).join('');
+    }
+
+    return `
+      <div class="screen">
+        <div class="topbar" style="padding-left:0;padding-right:0;">
+          <button class="back-btn visible" onclick="App.goHome()">← Dashboard</button>
+          <span class="step-label">Saved</span>
+        </div>
+        <div class="eyebrow">Logged</div>
+        <h1>Session saved.</h1>
+        <div class="summary-card">
+          <div class="debrief-stat"><span class="ds-label">Duration</span><span class="ds-value">${s.duration} hr${s.duration == 1 ? '' : 's'}</span></div>
+          <div class="debrief-stat"><span class="ds-label">Client</span><span class="ds-value">${s.clientCode || 'Standalone'}</span></div>
+          ${totalCount ? `<div class="debrief-stat"><span class="ds-label">Checklist items noted</span><span class="ds-value">${checkedCount} / ${totalCount}</span></div>` : ''}
+        </div>
+        ${recapHtml ? `<div class="section-label" style="padding:0;margin-top:24px;">Your reflection</div>` + recapHtml : ''}
+        <div class="spacer"></div>
+        <button class="btn-primary" onclick="App.goHome()">Back to dashboard</button>
+      </div>
+    `;
+  }
+
+  function renderSessionDetail() {
+    return renderDebrief();
+  }
+
+  function countChecked(checklist) {
+    if (!checklist) return 0;
+    let n = 0;
+    Object.values(checklist).forEach(comp => {
+      Object.values(comp).forEach(v => { if (v) n++; });
+    });
+    return n;
+  }
+  function countTotal(level) {
+    const crit = ICF_CRITERIA[level];
+    if (!crit) return 0;
+    let n = 0;
+    ICF_COMPETENCY_META.forEach(meta => {
+      const c = crit.competencies[meta.id];
+      if (!c.reflectionOnly) n += c.items.length;
+    });
+    return n;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ============== APP CONTROLLER ==============
+
   window.App = {
     go,
-    setStep,
+    setStep(name) {
+      ui.screen = 'setup';
+      setStep(name);
+    },
     selectLevel(id) { state.level = id; save(); render(); },
     selectClients(val) { state.trackClients = val; save(); render(); },
     update(key, val) { state[key] = val; save(); },
-    finish() { setStep('done'); }
+    finish() { setStep('done'); },
+
+    goHome() {
+      ui.screen = 'home';
+      render();
+    },
+
+    startLogSession() {
+      ui.draft = {
+        duration: '',
+        clientCode: null,
+        reflection: {},
+        mindsetNotes: {},
+        checklist: {},
+      };
+      ui.screen = 'logSession';
+      render();
+    },
+
+    cancelDraft() {
+      ui.draft = null;
+      ui.screen = 'home';
+      render();
+    },
+
+    updateDraft(key, val) {
+      ui.draft[key] = val;
+    },
+
+    pickCode(code) {
+      ui.draft.clientCode = (ui.draft.clientCode === code) ? null : code;
+      render();
+    },
+
+    addNewCode() {
+      const next = clientCodes.length + 1;
+      const code = 'Client ' + String(next).padStart(2, '0');
+      clientCodes.push(code);
+      saveCodes();
+      ui.draft.clientCode = code;
+      render();
+    },
+
+    goToReflectChoice() {
+      ui.screen = 'reflect';
+      render();
+    },
+
+    backToLog() {
+      ui.screen = 'logSession';
+      render();
+    },
+
+    updateReflection(key, val) {
+      ui.draft.reflection[key] = val;
+    },
+
+    goToChecklist() {
+      ui.screen = 'checklist';
+      render();
+    },
+
+    backToReflect() {
+      ui.screen = 'reflect';
+      render();
+    },
+
+    toggleComp(id) {
+      ui.openComp = (ui.openComp === id) ? null : id;
+      render();
+    },
+
+    toggleCheck(compId, key) {
+      const level = state.level || 'PCC';
+      if (!ui.draft.checklist[level]) ui.draft.checklist[level] = {};
+      if (!ui.draft.checklist[level][compId]) ui.draft.checklist[level][compId] = {};
+      ui.draft.checklist[level][compId][key] = !ui.draft.checklist[level][compId][key];
+      render();
+    },
+
+    updateMindsetNote(compId, val) {
+      ui.draft.mindsetNotes[compId] = val;
+    },
+
+    skipToSave() {
+      App.saveSession();
+    },
+
+    saveSession() {
+      const d = ui.draft;
+      const hasReflectionContent = Object.values(d.reflection).some(v => v && v.trim());
+      const session = {
+        id: 'sess_' + Date.now(),
+        date: new Date().toISOString(),
+        duration: parseFloat(d.duration) || 0,
+        clientCode: d.clientCode,
+        reflection: hasReflectionContent ? d.reflection : null,
+        mindsetNotes: d.mindsetNotes,
+        checklist: d.checklist[state.level] || {},
+        level: state.level,
+      };
+      sessions.push(session);
+      saveSessions();
+      ui.viewingSessionId = session.id;
+      ui.draft = null;
+      ui.screen = 'debrief';
+      render();
+    },
+
+    viewSession(id) {
+      ui.viewingSessionId = id;
+      ui.screen = 'sessionDetail';
+      render();
+    },
   };
 
   render();
