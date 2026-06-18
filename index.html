@@ -1405,6 +1405,7 @@ const ICF_CRITERIA = {
     const s = sessions.find(x => x.id === ui.viewingSessionId) || sessions[sessions.length - 1];
     if (!s) return renderHome();
 
+    const isNewlySaved = ui.screen === 'debrief';
     const checkedCount = countChecked(s.checklist);
     const totalCount = countTotal(s.level);
 
@@ -1417,23 +1418,99 @@ const ICF_CRITERIA = {
       }).join('');
     }
 
+    const checklistHtml = renderSavedChecklist(s);
+
     return `
       <div class="screen">
         <div class="topbar" style="padding-left:0;padding-right:0;">
           <button class="back-btn visible" onclick="App.goHome()">← Dashboard</button>
-          <span class="step-label">Saved</span>
+          <span class="step-label">${isNewlySaved ? 'Saved' : 'Session'}</span>
         </div>
-        <div class="eyebrow">Logged</div>
-        <h1>Session saved.</h1>
+        <div class="eyebrow">${isNewlySaved ? 'Logged' : formatDate(s.date)}</div>
+        <h1>${isNewlySaved ? 'Session saved.' : (s.clientCode || 'Standalone session')}</h1>
         <div class="summary-card">
           <div class="debrief-stat"><span class="ds-label">Duration</span><span class="ds-value">${s.duration} hr${s.duration == 1 ? '' : 's'}</span></div>
           <div class="debrief-stat"><span class="ds-label">Client</span><span class="ds-value">${s.clientCode || 'Standalone'}</span></div>
           ${totalCount ? `<div class="debrief-stat"><span class="ds-label">Checklist items noted</span><span class="ds-value">${checkedCount} / ${totalCount}</span></div>` : ''}
         </div>
-        ${recapHtml ? `<div class="section-label" style="padding:0;margin-top:24px;">Your reflection</div>` + recapHtml : ''}
+        ${recapHtml ? `<div class="section-label" style="padding:0;margin-top:24px;">Reflection</div>` + recapHtml : ''}
+        ${checklistHtml}
         <div class="spacer"></div>
         <button class="btn-primary" onclick="App.goHome()">Back to dashboard</button>
       </div>
+    `;
+  }
+
+  function renderSavedChecklist(s) {
+    const level = s.level || state.level;
+    const crit = ICF_CRITERIA[level];
+    if (!crit) return '';
+    const checklist = s.checklist || {};
+    const hasAnyChecked = countChecked(checklist) > 0;
+    const hasMindsetNotes = s.mindsetNotes && Object.values(s.mindsetNotes).some(v => v && v.trim());
+    if (!hasAnyChecked && !hasMindsetNotes) return '';
+
+    let lastDomain = null;
+    const compsHtml = ICF_COMPETENCY_META.map(meta => {
+      const compData = crit.competencies[meta.id];
+      const compChecked = checklist[meta.id] || {};
+      const mindsetNote = s.mindsetNotes && s.mindsetNotes[meta.id];
+
+      if (compData.reflectionOnly) {
+        if (!mindsetNote) return '';
+      } else {
+        const anyChecked = compData.items.some((item, idx) => {
+          const key = (typeof item === 'object' && item.id) ? item.id : String(idx);
+          return !!compChecked[key];
+        });
+        if (!anyChecked) return '';
+      }
+
+      let domainHtml = '';
+      if (meta.domain !== lastDomain) {
+        domainHtml = `<div class="domain-label">${meta.domain}</div>`;
+        lastDomain = meta.domain;
+      }
+
+      let itemsHtml = '';
+      if (compData.reflectionOnly) {
+        itemsHtml = `<div class="comp-note">${compData.note}</div>
+          <div class="ar-a" style="font-size:13.5px;line-height:1.5;">${escapeHtml(mindsetNote)}</div>`;
+      } else {
+        itemsHtml = compData.items.map((item, idx) => {
+          const isObj = typeof item === 'object';
+          const text = isObj ? item.text : item;
+          const markerId = isObj ? item.id : null;
+          const key = markerId || String(idx);
+          const checked = !!compChecked[key];
+          if (!checked) return '';
+          return `
+            <div class="check-item" style="cursor:default;">
+              <div class="check-box checked">✓</div>
+              <div class="check-text">${markerId ? `<span class="marker-id">${markerId}</span>` : ''}${text}</div>
+            </div>`;
+        }).join('');
+      }
+
+      return `
+        ${domainHtml}
+        <div class="comp-card">
+          <div class="comp-header" style="cursor:default;">
+            <div class="ch-left">
+              <div class="comp-num">${meta.id}</div>
+              <div class="comp-name">${meta.name}</div>
+            </div>
+          </div>
+          <div class="comp-body open">${itemsHtml}</div>
+        </div>`;
+    }).join('');
+
+    if (!compsHtml.trim()) return '';
+
+    return `
+      <div class="section-label" style="padding:0;margin-top:24px;">ICF self-assessment — what you noticed</div>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 14px;">Items you checked during this session\'s ${level} checklist.</p>
+      ${compsHtml}
     `;
   }
 
