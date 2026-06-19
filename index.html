@@ -691,6 +691,120 @@
     font-size: 14px;
     line-height: 1.5;
   }
+
+  /* --- Goal tags --- */
+  .goal-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .goal-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #F2F5F2;
+    color: var(--sage);
+    border: 1px solid #D7E3DC;
+    border-radius: 20px;
+    padding: 7px 8px 7px 13px;
+    font-size: 12.5px;
+    font-weight: 500;
+    max-width: 100%;
+  }
+  .goal-tag .gt-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 220px;
+  }
+  .goal-tag .gt-remove {
+    cursor: pointer;
+    color: var(--sage);
+    opacity: 0.6;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px;
+  }
+  .pick-goal-section {
+    margin-top: 28px;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .pick-goal-section .pg-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .pick-goal-section .pg-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .pick-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    cursor: pointer;
+  }
+  .pick-item .pick-box {
+    width: 19px; height: 19px;
+    border-radius: 5px;
+    border: 1.5px solid var(--line-strong);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: transparent;
+  }
+  .pick-item .pick-box.picked {
+    background: var(--clay);
+    border-color: var(--clay);
+    color: #fff;
+  }
+  .pick-item .pick-text { font-size: 13.5px; line-height: 1.4; }
+
+  .goal-add-btn {
+    font-size: 12px;
+    color: var(--clay);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    padding: 2px 0;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 18px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    max-width: 88%;
+    text-align: center;
+    z-index: 50;
+    animation: rise 0.3s ease;
+  }
+
+  .pending-goal-banner {
+    margin: 0 24px 14px;
+    background: #FBF1EA;
+    border: 1px solid #EAD9C8;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #6B4A33;
+    line-height: 1.45;
+  }
 </style>
 </head>
 <body>
@@ -1031,6 +1145,10 @@ const ICF_CRITERIA = {
     else if (ui.screen === 'debrief') html = renderDebrief();
     else if (ui.screen === 'sessionDetail') html = renderSessionDetail();
 
+    if (ui.goalToast) {
+      html += `<div class="toast">${escapeHtml(ui.goalToast)}</div>`;
+    }
+
     app.innerHTML = html;
   }
 
@@ -1213,6 +1331,10 @@ const ICF_CRITERIA = {
       }).join('') + `</div>`;
     }
 
+    const pendingBanner = (ui.pendingGoalTags && ui.pendingGoalTags.length)
+      ? `<div class="pending-goal-banner">${ui.pendingGoalTags.length} goal${ui.pendingGoalTags.length === 1 ? '' : 's'} queued for your next session's reflection — they'll show up automatically when you log it.</div>`
+      : '';
+
     return `
       <div class="home-header">
         <div>
@@ -1221,6 +1343,8 @@ const ICF_CRITERIA = {
         </div>
         <div class="icon-btn" onclick="App.setStep('level')" title="Settings">⚙</div>
       </div>
+
+      ${pendingBanner}
 
       <div class="progress-card">
         <div class="pc-title">Progress toward ${state.level || 'your level'}</div>
@@ -1289,13 +1413,17 @@ const ICF_CRITERIA = {
 
   function renderReflect() {
     const d = ui.draft;
-    const qBlocks = REFLECTION_QUESTIONS.map((q, i) => `
+    const qBlocks = REFLECTION_QUESTIONS.map((q, i) => {
+      const tagRow = (q.key === 'nextGoal') ? renderGoalTagRow(d) : '';
+      return `
       <div class="reflect-q">
-        <div class="q-num">Question ${i + 1} of ${REFLECTION_QUESTIONS.length + 1}</div>
+        <div class="q-num">Question ${i + 1} of ${REFLECTION_QUESTIONS.length}</div>
         <div class="q-text">${q.text}</div>
         <textarea class="reflect-input" placeholder="Write as much or as little as you like…" oninput="App.updateReflection('${q.key}', this.value)">${d.reflection[q.key] || ''}</textarea>
+        ${tagRow}
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     return `
       <div class="screen">
@@ -1310,6 +1438,78 @@ const ICF_CRITERIA = {
         <div class="spacer"></div>
         <button class="btn-primary" onclick="App.goToChecklist()">Continue to ICF checklist</button>
         <p class="skip-note"><a onclick="App.skipToSave()">Skip the checklist and save</a></p>
+      </div>
+    `;
+  }
+
+  function renderGoalTagRow(d) {
+    const tags = d.nextGoalTags || [];
+    let chipsHtml = tags.map((t, idx) => `
+      <div class="goal-tag">
+        <span class="gt-text">${t.markerId ? t.markerId + ' · ' : ''}${escapeHtml(t.text)}</span>
+        <span class="gt-remove" onclick="App.removeGoalTag(${idx})">✕</span>
+      </div>
+    `).join('');
+
+    return `
+      <div class="goal-tag-row">
+        ${chipsHtml}
+        <span class="goal-add-btn" onclick="App.openGoalPicker()">+ Add from areas to work on</span>
+      </div>
+      ${ui.showGoalPicker ? renderGoalPickerInline(d) : ''}
+    `;
+  }
+
+  function renderGoalPickerInline(d) {
+    // Only meaningful if there's at least one PAST session with unchecked items to pull from,
+    // or the coach hasn't done a checklist yet this session — so we pull from the most recent
+    // past session's unchecked items as the candidate pool.
+    const lastSession = sessions[sessions.length - 1];
+    if (!lastSession) {
+      return `<p class="hint" style="margin-top:8px;">No past session checklist to pull from yet.</p>`;
+    }
+    const level = lastSession.level || state.level;
+    const crit = ICF_CRITERIA[level];
+    const checklist = lastSession.checklist || {};
+
+    let lastDomain = null;
+    const pickItems = ICF_COMPETENCY_META.map(meta => {
+      const compData = crit.competencies[meta.id];
+      if (compData.reflectionOnly) return '';
+      const compChecked = checklist[meta.id] || {};
+      const unchecked = compData.items.filter((item, idx) => {
+        const key = (typeof item === 'object' && item.id) ? item.id : String(idx);
+        return !compChecked[key];
+      });
+      if (unchecked.length === 0) return '';
+
+      let domainHtml = '';
+      if (meta.domain !== lastDomain) {
+        domainHtml = `<div class="domain-label" style="margin-top:14px;">${meta.domain}</div>`;
+        lastDomain = meta.domain;
+      }
+
+      const itemsHtml = unchecked.map(item => {
+        const isObj = typeof item === 'object';
+        const text = isObj ? item.text : item;
+        const markerId = isObj ? item.id : null;
+        const tagKey = (meta.id) + '::' + (markerId || text);
+        const isPicked = (d.nextGoalTags || []).some(t => t.tagKey === tagKey);
+        return `
+          <div class="pick-item" onclick="App.toggleGoalPick('${tagKey}', ${meta.id}, ${markerId ? `'${markerId}'` : 'null'}, ${JSON.stringify(text)})">
+            <div class="pick-box ${isPicked ? 'picked' : ''}">${isPicked ? '✓' : ''}</div>
+            <div class="pick-text">${markerId ? `<span class="marker-id">${markerId}</span>` : ''}${text}</div>
+          </div>`;
+      }).join('');
+
+      return domainHtml + itemsHtml;
+    }).join('');
+
+    return `
+      <div class="pick-goal-section">
+        <div class="pg-title">From your last session</div>
+        <div class="pg-sub">Tap any of these to add as a goal for next time. Optional — pick as many or as few as you like.</div>
+        ${pickItems || '<p class="hint">Everything was checked last time — nothing left to pick from here.</p>'}
       </div>
     `;
   }
@@ -1451,7 +1651,7 @@ const ICF_CRITERIA = {
     // Only show if the coach actually engaged with the checklist
     if (!hasAnyChecked && !hasMindsetNotes) return '';
 
-    function renderCompItems(filterFn) {
+    function renderCompItems(filterFn, addAffordance) {
       let lastDomain = null;
       return ICF_COMPETENCY_META.map(meta => {
         const compData = crit.competencies[meta.id];
@@ -1475,9 +1675,13 @@ const ICF_CRITERIA = {
           const isObj = typeof item === 'object';
           const text = isObj ? item.text : item;
           const markerId = isObj ? item.id : null;
+          const addBtn = addAffordance
+            ? '<span class="goal-add-btn" style="margin-left:auto;flex-shrink:0;" onclick="event.stopPropagation();App.addGoalFromPastSession(' + meta.id + ', ' + (markerId ? `'${markerId}'` : 'null') + ', ' + JSON.stringify(text).replace(/"/g, "&quot;") + ')">+ goal</span>'
+            : '';
           return '<div class="check-item" style="cursor:default;">' +
             '<div class="check-box ' + (isCheckedSection ? 'checked' : '') + '">' + (isCheckedSection ? '&#10003;' : '') + '</div>' +
             '<div class="check-text">' + (markerId ? '<span class="marker-id">' + markerId + '</span>' : '') + text + '</div>' +
+            addBtn +
             '</div>';
         }).join('');
 
@@ -1507,8 +1711,8 @@ const ICF_CRITERIA = {
         '</div></div>';
     })() : '';
 
-    const checkedHtml = renderCompItems(v => v);
-    const uncheckedHtml = renderCompItems(v => !v);
+    const checkedHtml = renderCompItems(v => v, false);
+    const uncheckedHtml = renderCompItems(v => !v, true);
 
     let out = '';
 
@@ -1520,12 +1724,26 @@ const ICF_CRITERIA = {
 
     if (uncheckedHtml.trim()) {
       out += '<div class="section-label" style="padding:0;margin-top:28px;">Areas to work on</div>' +
-        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;">ICF ' + level + ' behaviors you did not check — consider these for your next session.</p>' +
+        '<p style="font-size:13px;color:var(--muted);margin:0 0 14px;">ICF ' + level + ' behaviors you did not check — tap "+ goal" to carry one into your next session\'s reflection.</p>' +
         uncheckedHtml;
     }
 
+    const goalTagsHtml = renderSavedGoalTags(s);
+    if (goalTagsHtml) out += goalTagsHtml;
+
     return out;
   }
+
+  function renderSavedGoalTags(s) {
+    if (!s.nextGoalTags || s.nextGoalTags.length === 0) return '';
+    const chips = s.nextGoalTags.map(t =>
+      '<div class="goal-tag" style="cursor:default;"><span class="gt-text">' +
+      (t.markerId ? t.markerId + ' · ' : '') + escapeHtml(t.text) + '</span></div>'
+    ).join('');
+    return '<div class="section-label" style="padding:0;margin-top:28px;">Carried into goal for next session</div>' +
+      '<div class="goal-tag-row" style="margin-top:0;">' + chips + '</div>';
+  }
+
   function renderSessionDetail() {
     return renderDebrief();
   }
@@ -1578,9 +1796,11 @@ const ICF_CRITERIA = {
         duration: '',
         clientCode: null,
         reflection: {},
+        nextGoalTags: ui.pendingGoalTags || [],
         mindsetNotes: {},
         checklist: {},
       };
+      ui.pendingGoalTags = null;
       ui.screen = 'logSession';
       render();
     },
@@ -1650,6 +1870,41 @@ const ICF_CRITERIA = {
       ui.draft.mindsetNotes[compId] = val;
     },
 
+    openGoalPicker() {
+      ui.showGoalPicker = !ui.showGoalPicker;
+      render();
+    },
+
+    toggleGoalPick(tagKey, compId, markerId, text) {
+      if (!ui.draft.nextGoalTags) ui.draft.nextGoalTags = [];
+      const idx = ui.draft.nextGoalTags.findIndex(t => t.tagKey === tagKey);
+      if (idx > -1) {
+        ui.draft.nextGoalTags.splice(idx, 1);
+      } else {
+        ui.draft.nextGoalTags.push({ tagKey, compId, markerId, text });
+      }
+      render();
+    },
+
+    removeGoalTag(idx) {
+      ui.draft.nextGoalTags.splice(idx, 1);
+      render();
+    },
+
+    addGoalFromPastSession(compId, markerId, text) {
+      // Queue as a pending goal tag — picked up automatically next time
+      // a session is logged, without navigating away from this view.
+      const tagKey = compId + '::' + (markerId || text);
+      if (!ui.pendingGoalTags) ui.pendingGoalTags = [];
+      const exists = ui.pendingGoalTags.some(t => t.tagKey === tagKey);
+      if (!exists) {
+        ui.pendingGoalTags.push({ tagKey, compId, markerId, text });
+      }
+      ui.goalToast = (exists ? 'Already queued: ' : 'Added to next session\'s goal: ') + text;
+      render();
+      setTimeout(() => { ui.goalToast = null; render(); }, 2200);
+    },
+
     skipToSave() {
       App.saveSession();
     },
@@ -1663,6 +1918,7 @@ const ICF_CRITERIA = {
         duration: parseFloat(d.duration) || 0,
         clientCode: d.clientCode,
         reflection: hasReflectionContent ? d.reflection : null,
+        nextGoalTags: (d.nextGoalTags && d.nextGoalTags.length) ? d.nextGoalTags : null,
         mindsetNotes: d.mindsetNotes,
         checklist: d.checklist[state.level] || {},
         level: state.level,
